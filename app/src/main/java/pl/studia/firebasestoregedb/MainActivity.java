@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView textView;
     private ProgressBar progressBar;
     private Button button;
-    private Uri imageUri;
+    Uri imageUri;
     private boolean isImageAdded = false;
 
     DatabaseReference dataRef;
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = editText.getText().toString().trim();
+                final String name = editText.getText().toString();
                 if(isImageAdded != false && name != null) {
                     uploadImage(name);
                 }
@@ -88,7 +88,8 @@ public class MainActivity extends AppCompatActivity {
         storageRef.child(key + ".jpg").putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                storageRef.child(key + ".jps").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+
+                storageRef.child(key + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
                         HashMap hashMap = new HashMap();
@@ -107,8 +108,9 @@ public class MainActivity extends AppCompatActivity {
         }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                double progress = ( 100.0 * snapshot.getBytesTransferred()) / snapshot.getTotalByteCount();
+                double progress = ( 100 * snapshot.getBytesTransferred()) / snapshot.getTotalByteCount();
                 progressBar.setProgress((int) progress);
+                textView.setText(progress + " %");
             }
         });
 
@@ -141,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
             }
             else if (requestCode == PICK_CAMERA_REQUEST){
                 imageView.setImageURI(imageUri);
+                isImageAdded = true;
 
             }
         }
