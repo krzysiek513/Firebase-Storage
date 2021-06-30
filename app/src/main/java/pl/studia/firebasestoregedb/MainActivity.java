@@ -95,11 +95,13 @@ public class MainActivity extends AppCompatActivity {
                         HashMap hashMap = new HashMap();
                         hashMap.put("CarName", imgName);
                         hashMap.put("ImageUrl", uri.toString());
+                        hashMap.put("itemDescription", imgName + " description");
 
-                        dataRef.setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        dataRef.child(key).setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
-                                Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_LONG).show();
+                                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                                //Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_LONG).show();
                             }
                         });
                     }
